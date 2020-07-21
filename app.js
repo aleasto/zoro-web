@@ -7,6 +7,9 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var locationsRouter = require('./routes/locations');
 
+var db = require('./db');
+db.tryConnectAsync();
+
 var app = express();
 
 // view engine setup
