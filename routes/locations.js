@@ -18,7 +18,16 @@ router.post('/', function(req, res, next) {
   }
   
   let inObj = req.body;
-  let dbObj = { date: inObj.date, lat: inObj.lat, lon: inObj.lon, acc: inObj.acc };
+  let dbObj = { 
+    report_time: new Date().getTime(),
+    fix_time: inObj.time,
+    lat: inObj.lat,
+    lon: inObj.lon,
+    alt: inObj.alt,
+    acc: inObj.acc,
+    bat: inObj.bat,
+    net: inObj.net,
+  };
   db.get().collection("locations").insertOne(dbObj)
   .then(() => res.send("Location saved"))
   .catch(next);
