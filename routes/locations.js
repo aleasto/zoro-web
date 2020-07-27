@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+const defined = o => typeof o !== "undefined";
 
 /* GET locations listing. */
 router.get('/', function(req, res, next) {
-  db.get().collection("locations").find()
+  db.get().collection("locations").find(parseQuery(req.query))
   .toArray()
   .then(items => res.send(items))
   .catch(next)
@@ -40,4 +41,22 @@ function verifyToken(authorization) {
   // Lazy authorization, please don't judge
   return token == process.env.ACCESS_TOKEN;
 }
+
+function parseQuery(params) {
+  let query = {};
+  if (defined(params.before) || defined(params.after)) {
+    query.fix_time = {};
+    if (defined(params.before))
+      query.fix_time.$lt = +params.before;
+    if (defined(params.after))
+      query.fix_time.$gt = +params.after;
+  }
+
+  if (defined(params.acc))
+    query.acc = { $lte: +params.acc };
+
+  console.log(query);
+  return query;
+}
+
 module.exports = router;
