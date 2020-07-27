@@ -6,30 +6,49 @@ function initMap() {
     zoom: 6
   });
 
-  map.data.setStyle(function(feature) {
-    var magnitude = feature.getProperty('mag');
+  map.data.setStyle(feature => {
     return {
-      icon: getCircle(magnitude)
+      visible: false
     };
   });
-
-  // Create a <script> tag and set the USGS URL as the source.
-  var script = document.createElement('script');
-  script.src = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp';
-  document.getElementsByTagName('head')[0].appendChild(script);
   
+  loadTrackerData();
 }
 
-function getCircle(magnitude) {
-  return {
-    path: google.maps.SymbolPath.CIRCLE,
+function addCirlce(feature) {
+  feature.circle = new google.maps.Circle({
+    map,
+    center: feature.getGeometry().get(),
+    radius: feature.getProperty('acc'),
     fillColor: 'red',
-    fillOpacity: .2,
-    scale: Math.pow(2, magnitude) / 2,
-    strokeWeight: 0
-  };
+    fillOpacity: .1,
+    strokeColor: 'white',
+    strokeWeight: .5,
+    zIndex: feature.getProperty('fix_time')
+  });
 }
 
-function eqfeed_callback(results) {
-  map.data.addGeoJson(results);
+function loadTrackerData() {
+  map.data.forEach(feature => map.data.remove(feature));
+  map.data.loadGeoJson("/locations?acc=16&geojson", null, () => {
+    let bounds = new google.maps.LatLngBounds(); 
+    let lastSeen;
+    map.data.forEach(function(feature){
+      if (!lastSeen || feature.getProperty('fix_time') > lastSeen.getProperty('fix_time'))
+        lastSeen = feature;
+
+      addCirlce(feature);
+      feature.getGeometry().forEachLatLng(function(latlng){
+        bounds.extend(latlng);
+      });
+    });
+
+    lastSeen.circle.setOptions({
+      strokeColor: 'black',
+      strokeWeight: 2,
+    });
+
+    map.fitBounds(bounds);
+    map.setZoom(18);
+  });
 }

@@ -7,7 +7,8 @@ const defined = o => typeof o !== "undefined";
 router.get('/', function(req, res, next) {
   db.get().collection("locations").find(parseQuery(req.query))
   .toArray()
-  .then(items => res.send(items))
+  .then(items => defined(req.query.geojson) ? mapToGeoJSON(items) : items)
+  .then(data => res.send(data))
   .catch(next)
 });
 
@@ -33,6 +34,22 @@ router.post('/', function(req, res, next) {
   .then(() => res.send("Location saved"))
   .catch(next);
 });
+
+function mapToGeoJSON(points) {
+  points = points.map(point => {
+    return {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [
+          point.lon, point.lat
+        ]
+      },
+      properties: (p => { delete p._id; delete p.lat; delete p.lon; return p })(point),
+    }
+  });
+  return { type: "FeatureCollection", features: points };
+}
 
 function verifyToken(authorization) {
   if (!authorization) return false;
