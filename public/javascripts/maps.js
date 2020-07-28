@@ -58,7 +58,8 @@ function addCirlce(feature) {
 
 function loadTrackerData() {
   clearData();
-  map.data.loadGeoJson("/locations?acc=16&geojson", null, () => {
+  let query = "?geojson&" + document.location.search.substr(1);
+  map.data.loadGeoJson(`/locations${query}`, null, () => {
     let bounds = new google.maps.LatLngBounds(); 
     let lastSeen;
     map.data.forEach(function(feature){
