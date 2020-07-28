@@ -72,9 +72,8 @@ function loadTrackerData() {
         lastSeen = feature;
 
       addCirlce(feature);
-      feature.getGeometry().forEachLatLng(function(latlng){
-        bounds.extend(latlng);
-      });
+      bounds.extend(feature.circle.getBounds().getNorthEast());
+      bounds.extend(feature.circle.getBounds().getSouthWest());
     });
 
     if (lastSeen) { // AKA: if we got any point
@@ -85,7 +84,7 @@ function loadTrackerData() {
       });
 
       map.fitBounds(bounds);
-      map.setZoom(map.getZoom() - 4);
+      map.setZoom(map.getZoom() - 1);
     }
   });
 }
