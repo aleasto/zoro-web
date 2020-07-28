@@ -77,14 +77,16 @@ function loadTrackerData() {
       });
     });
 
-    lastSeen.circle.setOptions({
-      fillColor: 'yellow',
-      fillOpacity: 0.5,
-      strokeWeight: 2,
-    });
+    if (lastSeen) { // AKA: if we got any point
+      lastSeen.circle.setOptions({
+        fillColor: 'yellow',
+        fillOpacity: 0.5,
+        strokeWeight: 2,
+      });
 
-    map.fitBounds(bounds);
-    map.setZoom(map.getZoom() - 4);
+      map.fitBounds(bounds);
+      map.setZoom(map.getZoom() - 4);
+    }
   });
 }
 
