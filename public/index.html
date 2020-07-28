@@ -4,8 +4,30 @@
   <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBaz4BxDC3Hcl5WWl3fgbCN4LbNBhJHo94&callback=initMap">
   </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("from_date").valueAsDate = new Date();
+      document.getElementById("to_date").valueAsDate = new Date();
+    });
+  </script>
   <link rel="stylesheet" href="/stylesheets/index.css">
 </head>
 <body>
   <div id="map"></div>
+    <div id="controls">
+      <span>From:</span>
+      <input type="date" id="from_date">
+      <input type="time" id="from_time" value="00:00">
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <span>To:</span>
+      <input type="date" id="to_date">
+      <input type="time" id="to_time" value="23:59">
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <span>Accuracy better than </span>
+      <input type="number" id="acc" min=1 max=999 value="50">
+      <span>meters</span>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <button id="submit" onclick="loadTrackerData()">Submit</button>
+    </div>
+  </div>
 </body>

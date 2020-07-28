@@ -58,7 +58,12 @@ function addCirlce(feature) {
 
 function loadTrackerData() {
   clearData();
-  let query = "?geojson&" + document.location.search.substr(1);
+
+  let from = parseDateTime("from_date", "from_time");
+  let to = parseDateTime("to_date", "to_time");
+  let acc = document.getElementById("acc").value;
+  let query = `?geojson&after=${from}&before=${to}&acc=${acc}`;
+
   map.data.loadGeoJson(`/locations${query}`, null, () => {
     let bounds = new google.maps.LatLngBounds(); 
     let lastSeen;
@@ -89,4 +94,16 @@ function clearData() {
     feature.circle.setMap(null);
     map.data.remove(feature);
   });
+}
+
+function parseDateTime(dateElt, timeElt) {
+    /**
+   * @type {Date}
+   */
+  let from = document.getElementById(dateElt).valueAsDate;
+  let from_time = document.getElementById(timeElt).value.split(":");
+  from.setHours(from_time[0]);
+  from.setMinutes(from_time[1]);
+  from.setSeconds(from_time[2] || null);
+  return from.getTime();
 }
