@@ -4,7 +4,7 @@ const MongoClient = require('mongodb').MongoClient;
 let db;
 
 function tryConnectAsync() {
-  MongoClient.connect(process.env.MONGODB_URI)
+  MongoClient.connect(process.env.MONGODB_URI || "mongodb://localhost")
   .then(client => db = client.db("zorodb"))
   .catch(err => {
     console.error(err);
