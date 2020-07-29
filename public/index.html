@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <head>
+  <meta name="viewport" content="width=device-width"> 
   <script src="/javascripts/maps.js"></script>
   <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBaz4BxDC3Hcl5WWl3fgbCN4LbNBhJHo94&callback=initMap">
@@ -10,24 +11,28 @@
       document.getElementById("to_date").valueAsDate = new Date();
     });
   </script>
+  <link rel="stylesheet" href="/stylesheets/shared.css">
   <link rel="stylesheet" href="/stylesheets/index.css">
 </head>
 <body>
   <div id="map"></div>
-    <div id="controls">
-      <span>From:</span>
-      <input type="date" id="from_date">
+  <div id="controls">
+    <div>
+      <label for="from_date">From:</label>
+      <input type="date" id="from_date" name="from_date">
       <input type="time" id="from_time" value="00:00">
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <span>To:</span>
-      <input type="date" id="to_date">
-      <input type="time" id="to_time" value="23:59">
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <span>Accuracy better than </span>
-      <input type="number" id="acc" min=1 max=999 value="50">
-      <span>meters</span>
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <button id="submit" onclick="loadTrackerData()">Submit</button>
     </div>
+    <div>
+      <label for="to_date">To:</label>
+      <input type="date" id="to_date" name="to_date">
+      <input type="time" id="to_time" value="23:59">
+    </div>
+    <div>
+      <label for="acc">Accuracy better than </label>
+      <input type="number" id="acc" name="acc" min=1 max=999 value="50">
+      <span>meters</span>
+    </div>
+
+    <button id="submit" onclick="loadTrackerData()">Submit</button>
   </div>
 </body>
