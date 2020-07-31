@@ -43,11 +43,11 @@ function addCirlce(feature) {
     });
     let geometry = feature.getGeometry().get();
     infoWindow.setContent([
-      "<h2>" + new Date(feature.getProperty('fix_time')).toLocaleString() + "</h2>",
-      "Reported at: " + new Date(feature.getProperty('report_time')).toLocaleString(),
-      "Altitude: " + feature.getProperty('alt').toFixed(1),
-      "Accuracy: " + '±' + feature.getProperty('acc').toFixed(1) + 'm',
-      "Battery: " + feature.getProperty('bat') + '%',
+      `<h2>${new Date(feature.getProperty('fix_time')).toLocaleString()}</h2>`,
+      `Reported at: ${new Date(feature.getProperty('report_time')).toLocaleString()}`,
+      `Altitude: ${feature.getProperty('alt').toFixed(1)}m`,
+      `Accuracy: ±${feature.getProperty('acc').toFixed(1)}m`,
+      `Battery: ${feature.getProperty('bat')}%`,
       `<span>Network: ${feature.getProperty('net')}</span>${getSignalImage(feature)}`,
       `<a target="_blank" rel="noopener noreferrer"
         href="https://www.google.com/maps/search/?api=1&query=${geometry.lat()},${geometry.lng()}">View on Google Maps</a>`,
