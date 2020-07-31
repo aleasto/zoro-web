@@ -1,3 +1,5 @@
+const defined = o => typeof o !== "undefined";
+
 let map;
 let infoWindow;
 
@@ -46,10 +48,10 @@ function addCirlce(feature) {
       "Altitude: " + feature.getProperty('alt').toFixed(1),
       "Accuracy: " + '±' + feature.getProperty('acc').toFixed(1) + 'm',
       "Battery: " + feature.getProperty('bat') + '%',
-      "Network: " + feature.getProperty('net'),
+      `<span>Network: ${feature.getProperty('net')}</span>${getSignalImage(feature)}`,
       `<a target="_blank" rel="noopener noreferrer"
         href="https://www.google.com/maps/search/?api=1&query=${geometry.lat()},${geometry.lng()}">View on Google Maps</a>`,
-    ].join('<div>'));
+    ].reduce((out, el, i, arr) => out + '<div class="info-box">' + el + '</div>'));
     infoWindow.setPosition(feature.getGeometry().get());
     infoWindow.open(map);
     lastSelectedCircle = feature.circle;
@@ -107,4 +109,11 @@ function parseDateTime(dateElt, timeElt) {
   from.setMinutes(from_time[1]);
   from.setSeconds(from_time[2] || null);
   return from.getTime();
+}
+
+function getSignalImage(feature) {
+  if (!defined(feature.getProperty('sig'))) return "";
+
+  let type = feature.getProperty('net') == 'Wi-Fi' ? 'wifi' : 'gsm';
+  return `<img class="signal-strength" src="/images/${type}/${feature.getProperty('sig')}.svg">`;
 }

@@ -29,6 +29,7 @@ router.post('/', function(req, res, next) {
     acc: inObj.acc,
     bat: inObj.bat,
     net: inObj.net,
+    sig: inObj.sig,
   };
   db.get().collection("locations").insertOne(dbObj)
   .then(() => res.send("Location saved"))
